@@ -9,6 +9,7 @@
 
 jmp_buf env;
 
+void error_handler (HPDF_STATUS   error_no, HPDF_STATUS   detail_no, void *user_data);
 void show_desciption(HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *text);
 int crear_doc();
 void borrar(char *str);
