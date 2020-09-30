@@ -8,12 +8,7 @@
 
 jmp_buf env;
 
-#ifdef HPDF_DLL
-void  __stdcall
-#else
-void
-#endif
-error_handler (HPDF_STATUS   error_no,
+void error_handler (HPDF_STATUS   error_no,
                HPDF_STATUS   detail_no,
                void         *user_data)
 {
@@ -186,4 +181,8 @@ int crear_doc (){
     HPDF_Free (pdf);
 
     return 0;
+}
+
+void main(){
+    crear_doc();
 }
