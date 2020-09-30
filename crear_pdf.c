@@ -4,7 +4,7 @@
 #include <math.h>
 #include <setjmp.h>
 #include "hpdf.h"
-#include "grid_sheet.h"
+#include "aerolinea.h"
 
 jmp_buf env;
 
@@ -181,8 +181,4 @@ int crear_doc (){
     HPDF_Free (pdf);
 
     return 0;
-}
-
-void main(){
-    crear_doc();
 }
