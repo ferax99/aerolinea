@@ -2,6 +2,9 @@
 # TABLE STRUCTURE FOR: Aerolinea
 #
 
+create database Vuelos;
+use Vuelos;
+
 DROP TABLE IF EXISTS `Aerolinea`;
 
 CREATE TABLE `Aerolinea` (
