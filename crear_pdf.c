@@ -6,8 +6,6 @@
 #include "hpdf.h"
 #include "aerolinea.h"
 
-jmp_buf env;
-
 void error_handler (HPDF_STATUS   error_no,
                HPDF_STATUS   detail_no,
                void         *user_data)
@@ -45,20 +43,25 @@ void show_description (HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *tex
 
 int crear_doc (){
     const char *page_title = "Comprobante";
-
+    char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
+                    "Codigo de Vuelo", "Lugar y Fecha de salida", "Lugar y Fecha de arribo",
+                    "Numero de asientos de la reservacion", "Personas de la reservacion", 
+                    "Monto de la reservacion"};
     HPDF_Doc  pdf;
     HPDF_Font font;
     HPDF_Page page;
     char fname[256] = "Comprobante";
     float tw;
     float fsize = 12;
-    int i;
+    int cont = 0;
     int len;
     float angle1;
     float angle2;
     float rad1;
     float rad2;
-    float ypos = 760;
+    float ypos = 790;
+    char * codigo = "jdsflkaS";
+    char * guarda;
 
     //strcpy (fname, argv[0])
     strcat (fname, ".pdf");
@@ -73,7 +76,6 @@ int crear_doc (){
         HPDF_Free (pdf);
         return 1;
     }
-
     // set compression mode
     HPDF_SetCompressionMode (pdf, HPDF_COMP_ALL);
 
@@ -99,8 +101,19 @@ int crear_doc (){
     // Font rendering mode
     HPDF_Page_SetFontAndSize(page, font, fsize);
     HPDF_Page_SetLineWidth (page, 2);
+    while(tags[cont][0] != 0){
+        guarda = consultar_doc(cont, codigo);
+        show_description (page,  60, ypos - 30, guarda);
+        HPDF_Page_SetTextRenderingMode (page, HPDF_FILL);
+        HPDF_Page_BeginText (page);
+        HPDF_Page_TextOut (page, 60, ypos, tags[cont]);
+        HPDF_Page_EndText (page);
 
+        HPDF_Page_SetFontAndSize(page, font, fsize);
+        HPDF_Page_SetLineWidth (page, 2);
      // PDF_FILL
+    }
+    /*
     show_description (page,  60, ypos, "01");
     HPDF_Page_SetTextRenderingMode (page, HPDF_FILL);
     HPDF_Page_BeginText (page);
@@ -174,7 +187,7 @@ int crear_doc (){
     HPDF_Page_TextOut (page, 60, ypos - 240, "Monto de la reservacion");
     HPDF_Page_EndText (page);
     HPDF_Page_SetFontAndSize(page, font, fsize);
-    HPDF_Page_SetLineWidth (page, 2);
+    HPDF_Page_SetLineWidth (page, 2);*/
     HPDF_SaveToFile (pdf, fname);
 
     /* clean up */
