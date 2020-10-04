@@ -12,12 +12,7 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <setjmp.h>
-#include "hpdf.h"
-#include "grid_sheet.h"
+#include "aerolinea.h"
 
 #ifdef STAND_ALONE
 jmp_buf env;
@@ -27,7 +22,7 @@ void __stdcall
 #else
 void
 #endif
-error_handler  (HPDF_STATUS   error_no,
+error_grid  (HPDF_STATUS   error_no,
                 HPDF_STATUS   detail_no,
                 void         *user_data)
 {
@@ -160,48 +155,3 @@ print_grid  (HPDF_Doc     pdf,
     HPDF_Page_SetGrayFill (page, 0);
     HPDF_Page_SetGrayStroke (page, 0);
 }
-
-#ifdef STAND_ALONE
-
-int
-main (int argc, char **argv)
-{
-    HPDF_Doc  pdf;
-    HPDF_Page page;
-    char fname[256];
-
-    strcpy (fname, argv[0]);
-    strcat (fname, ".pdf");
-
-    pdf = HPDF_New (error_handler, NULL);
-    if (!pdf) {
-        printf ("error: cannot create PdfDoc object\n");
-        return 1;
-    }
-
-    if (setjmp(env)) {
-        HPDF_Free (pdf);
-        return 1;
-    }
-
-    /* add a new page object. */
-    page = HPDF_AddPage (pdf);
-
-    HPDF_Page_SetHeight (page, 600);
-    HPDF_Page_SetWidth (page, 400);
-
-    print_grid  (pdf, page);
-
-
-    /* save the document to a file */
-    HPDF_SaveToFile (pdf, fname);
-
-    /* clean up */
-    HPDF_Free (pdf);
-
-    return 0;
-}
-
-#endif /* STAND_ALONE */
-
-

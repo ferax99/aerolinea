@@ -9,7 +9,7 @@ void submenu_op(){
 		printf("3 - Carga Usuarios\n");
 		printf("4 - Estado de Vuelo\n");
 		printf("5 - Estadisticas\n");
-		printf("6 - Salir\n");
+		printf("6 - Regresar\n");
 		printf("Elija una opcion: ");
 		scanf("%i",&camb);
 		switch(camb) {
@@ -58,7 +58,7 @@ void registro(){
 	    printf("1 - Ingresar Avion");
 		printf("2 - Eliminar Avion\n");
 		printf("3 - Mostrar Aviones\n");
-		printf("4 - Salir\n");
+		printf("4 - Regresar\n");
 		printf("Elija una opcion: ");
 		scanf("%i",&camb);
 		switch(camb) {
