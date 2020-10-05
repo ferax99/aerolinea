@@ -35,7 +35,7 @@ void show_description (HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *tex
     HPDF_Page_SetRGBFill (page, c.r, c.g, c.b);
 }
 
-int crear_doc (){
+int crear_doc (char * codigo){
     const char *page_title = "Comprobante";
     char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
                     "Codigo de Vuelo", "Lugar y Fecha de salida", "Lugar y Fecha de arribo",
@@ -44,13 +44,13 @@ int crear_doc (){
     HPDF_Doc  pdf;
     HPDF_Font font;
     HPDF_Page page;
-    char fname[256] = "Comprobante";
+    char fname[256];
     float tw;
     float fsize = 12;
     int cont = 0;
     float ypos = 790;
-    char * codigo = "jdsflkaS";
     char * guarda;
+    strcat(fname, codigo);
     strcat (fname, ".pdf");
 
     pdf = HPDF_New (error_handler, NULL);
