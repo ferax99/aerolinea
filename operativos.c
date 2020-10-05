@@ -1,5 +1,11 @@
 #include "aerolinea.h"
 void consultar_avion(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: sirve para consultar informacion sobre el avion e imprimirla en pantalla
+	*/
 	system("clear");
 	char ** anno = get_columna("select anno from Avion;");
 	char ** modelo = get_columna("select modelo from Avion;");
@@ -20,6 +26,12 @@ void consultar_avion(){
 	
 	}	
 int editar_Avion(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: Sirve para editar cualquier dato de un avion
+	*/
 	Avion a;
 	 char query[150];
 	 query[0] = '\0';
@@ -86,6 +98,12 @@ int editar_Avion(){
 	return 0 ;
 }
 void agregar_avion(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: sirve para agregar la informacion de un avion a la base
+	*/
 	Avion a;
 	char linea[256];
 	int max = 45;
@@ -109,6 +127,12 @@ void agregar_avion(){
 	getchar();
 	}
 int borrar_avion(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: sirve para borrar un avion dependiendo de su numero de matriucla
+	*/
 	Avion a;
 	int max = 45;
 	 char query[150];
@@ -129,6 +153,12 @@ int borrar_avion(){
 	return 0;
 	}
 void submenu_avion(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: menu para llamar funciones operativas de un avion
+	*/
     int camb;
 	do {
 		system("clear");
@@ -162,6 +192,12 @@ void submenu_avion(){
 	} while(camb != 5) ;
 }
 int insertar_personas(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: procedimiento para cargar personas a la base apartir de un archivo de texto
+	*/
 	system("clear");
 	printf("Direccion del archivo: ");
 	char * direccion;
@@ -223,6 +259,12 @@ int insertar_personas(){
 	
 	}
 void estado_vuelo(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: consulta datos especificos sobre la base 
+	*/
 	char *codigo;
 	char query[256];
 	char query2[256];
@@ -257,6 +299,12 @@ void estadisticas(){
 
 
 void submenu_op(){
+	/*
+	E:
+	S:
+	R:
+	funcionamiento: menu de navegacion
+	*/
 	char linea[256];
     char camb;
 	do {
@@ -274,7 +322,7 @@ void submenu_op(){
 		switch(camb) {
 		    case '1':
 				printf("nombre            | hub         \n");
-		        consultar_p("select nombre,hub from Aerolinea where idAereolinea  = 1;");
+		        consultar_p("select nombre,hub from Aerolinea where idAereolinea  = 1;");// la primera porque no hay funcionalidad de seleccion de aerolinea
 		        getchar();
 		        getchar();
 				break;
