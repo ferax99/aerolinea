@@ -177,3 +177,18 @@ INSERT INTO `Vuelo` (`idVuelo`, `codigo`, `origen`, `destino`, `salida`, `llegad
 INSERT INTO `Vuelo` (`idVuelo`, `codigo`, `origen`, `destino`, `salida`, `llegada`, `Avion_idAvion`) VALUES (5, '33382', 'Bradtkeville', 'New Reynaton', '1993-03-01 02:48:32', '2020-08-28 08:31:56', 6);
 
 
+
+create view SO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'SO'group by v.idVuelo; 
+create view BO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'BO'group by v.idVuelo; 
+create view EO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'EO'group by v.idVuelo; 
+
+
+create view estado as select v.codigo,v.origen,v.salida ,v.destino,v.llegada, s.total as SO, b.total as BO,e.total as EO from Vuelo v 
+inner join SO s on v.idVuelo = s.idVuelo inner join BO b on s.idVuelo = b.idVuelo inner
+join EO e on s.idVuelo = e.idVuelo;
+
+create view estado2 as select v.codigo,a.tipo,p.nombre,p.pasaporte,r.codigo as codigo_reserva ,a.idAsiento,a.costo from Asiento a inner join Reserva r on a.Reserva_idReserva = r.idReserva
+inner join Pasajero p on p.idPasajero = r.Pasajero_idPasajero inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%o%';

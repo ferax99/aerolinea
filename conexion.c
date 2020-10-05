@@ -10,32 +10,31 @@
       char *password = ""; /* set me first */
       char *database = "Vuelos";
  
- 
-      
+
+
 void alterar(char *str){
-	
-	 conn = mysql_init(NULL);
+  
+   conn = mysql_init(NULL);
 
       /* Connect to database */
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
-        printf("kkkk\n");
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
 
       /* send SQL query */
       if (mysql_query(conn, str)) {
-        printf("ppppp\n");
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
-      printf("hola\n");
-      mysql_free_result(res);
-      printf("gggs\n");
+       mysql_free_result(res);
       mysql_close(conn);
-	
-	}  
+  
+  }  
+
+
+      
 
 char * consultar(char * str){
   char resultado[1000]= "";
@@ -71,6 +70,46 @@ char * consultar(char * str){
       mysql_free_result(res);
       mysql_close(conn);
   }
+
+
+
+
+char ** get_columna(char * str){
+   conn = mysql_init(NULL);
+   char *ary[100] ;
+   
+      if (!mysql_real_connect(conn, server,
+            user, password, database, 0, NULL, 0)) {
+          fprintf(stderr, "%s\n", mysql_error(conn)); // Conexion con la Base
+          exit(1);}
+      if (mysql_query(conn, str)) {
+          fprintf(stderr, "%s\n", mysql_error(conn)); // Manda el query
+          exit(1);}
+
+     res = mysql_use_result(conn);
+     int x = mysql_num_fields(res);
+     int con = 0;
+     char salva[100][45];
+      while ((row = mysql_fetch_row(res)) ){
+        strcpy(salva[con],row[0]);
+        ary[con]= salva[con];
+      con++;
+      
+    }
+    ary[con]= NULL;
+  char **strings = ary; // a pointer to a pointer, for easy iteration
+  char **to_be_returned = malloc(sizeof(char*) * 60);
+  int i = 0;
+  while(*strings) {
+    to_be_returned[i] = malloc( sizeof(char) * strlen( *strings ) );
+    strcpy( to_be_returned[i++], *strings);
+    strings++;
+  }
+ to_be_returned[con]=NULL;
+ mysql_free_result(res);
+      mysql_close(conn);
+  return to_be_returned;}
+
 
 /*
 char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
