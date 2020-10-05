@@ -110,13 +110,6 @@ char ** get_columna(char * str){
       mysql_close(conn);
   return to_be_returned;}
 
-
-/*
-char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
-                    "Codigo de Vuelo", "Lugar y Fecha de salida", "Lugar y Fecha de arribo",
-                    "Numero de asientos de la reservacion", "Personas de la reservacion", 
-                    "Monto de la reservacion"};
-*/
 char * get_dato(char * str){
      conn = mysql_init(NULL);
       if (!mysql_real_connect(conn, server,
@@ -252,14 +245,6 @@ char * consultar_doc(int seleccion, char * codigo){
     return resultado;
   }
 }
-
-/*void consultar_reserva(char * codigo){
-  snprintf(consulta, sizeof(consulta), "select fecha from Reserva where codigo = '%s'", codigo);
-    resultado = consultar(consulta);
-    printf("%s\n", resultado);
-    //return resultado;
-}
-*/
 // para compilar usar el comando: gcc $(mysql_config --cflags) conexion.c aerolinea.c operativos.c generales.c $(mysql_config --libs) -o prueba
 
 // para ejecutar utilizar ./a.out
