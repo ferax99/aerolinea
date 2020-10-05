@@ -99,9 +99,10 @@ void eliminar_r(){
 	char consulta[90];
 	char linea[256];
 	Codigo c;
+	c.codigo = malloc(256);
 	printf("Ingrese el codigo de la Reserva: "); 
-    fgets(linea,sizeof(linea),stdin);
-    sscanf(linea,"%s",c.codigo);
+    scanf("%255s",c.codigo);
+    fflush(stdin);
 	snprintf(consulta, sizeof(consulta), "Delete from Reserva where codigo  = '%s'", c.codigo);
 	alterar(consulta);
 }
