@@ -4,7 +4,8 @@ i = atoi ("53");
 */
 void submenu_gen(){
     int camb;
-    char *codigo;
+    char linea[256];
+    char *codigo = "95475";
 	do {
 		printf("--------Opciones Generales--------\n");
 		printf("1 - Reservacion de Vuelo\n");
@@ -12,12 +13,14 @@ void submenu_gen(){
 		printf("3 - Eliminar Reservas\n");
 		printf("4 - Regresar\n");
 		printf("Elija una opcion: ");
-		scanf("%i",&camb);
+		fgets(linea,sizeof(linea),stdin);
+		sscanf(linea,"%i",&camb);
 		switch(camb) {
 			case 1: 
 				system("clear");
 				printf("\n");
 				printf("Reservar\n");
+				reservar(codigo);
 				printf("\n");
 				break;
 			case 2: 
@@ -32,6 +35,7 @@ void submenu_gen(){
 			    system("clear");
 				printf("\n");
 				printf("Se eliminara la reserva\n");
+				eliminar_r(codigo);
 				printf("\n");
 				break;
 			case 4:
@@ -43,9 +47,24 @@ void submenu_gen(){
 	} while(camb != 4) ;
 }
 
-/*void reservar(){
-
-}*/
+char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo){
+	char guarda_p[100];
+	char uno[30];
+	char pasap[30][100];
+	char * codigo;
+	int tam = 0;
+	strcpy(guarda_p,pasaportes);
+	char * pas = strtok(guarda_p,",");
+	while( pas != NULL ) {
+		strcpy(pasap[tam], pas);
+		pas = strtok(NULL, ",");    
+		tam++; 
+    } 
+    cantidad = determina_c(cantidad, pasap,tam,codigo_vuelo);
+    codigo = insertar_reserva(pasap,tam);
+    guarda_asiento(cantidad, codigo_vuelo);
+    crear_doc(codigo);
+}
 
 void consultar_r(char *codigo){
 	int cont;
@@ -72,36 +91,86 @@ void eliminar_r(char *codigo){
 	alterar(consulta);
 }
 
-void insertar_reserva(char * codigo_vuelo){
+void reservar(char * codigo_vuelo){
+	char line[256];
 	char *pasaportes;
+	char *codigo;
+	pasaportes = malloc(256);
 	printf("Ingrese los pasaportes(Formato: xxxxxxxx,xxxxxxx): ");
-	scanf("%s\n", pasaportes);
-	//void imprime_asientos();	
+	fgets(line,sizeof(line),stdin);
+	//scanf("%s\n", pasaportes);
+	sscanf(line,"%s",pasaportes);
+	//printf("%255s\n", pasaportes);
+	verifica_p(pasaportes,0,codigo_vuelo);
+}
+char * insertar_reserva(char pasaportes[30][100], int tam){
+	char consulta[90];
+	char * id;
+	char id_e[9];
+	char * codigo;
+	codigo = genera_codigo(8);
+	for(int i = 0; i < tam; i++){
+		id = obtenerId(pasaportes[i]);
+		strcpy(id_e,id);
+		snprintf(consulta, sizeof(consulta), "insert into Reserva (fecha,codigo,Pasajero_idPasajero) values (NOW(), '%s',%s)", codigo,id_e);
+		alterar(consulta);
+	}
+	return codigo;
 }
 
-/*int verifica_edad(char *pasaportes, int cantidad){
-	char consulta[90];
-	char guarda_p[100];
-	int i = 0;
-	strcpy(guarda_p,pasaportes);
-	snprintf(consulta, sizeof(consulta), "select nacimiento from Pasajero where pasaporte = '%s'", pasaportes);
-	//alterar(consulta);
-	while( muestra != NULL ) {
-		i = edad()
-		if 
-        strcpy(guarda_p, pasaportes);
-        
-        muestra = strtok(NULL, " ");
-      } 
-	return cantidad
+char * obtenerId_R(){
+	return get_dato("select max(idReserva) from Reserva;");
+}
 
+/*char * obtenerId_V(char * codigo_vuelo){
+	char consulta[90];
+	snprintf(consulta, sizeof(consulta), "select idVuelo from Vuelo where 
+	codigo = '%s'", codigo_vuelo);
+	return get_dato(consulta);
 }*/
+
+char * obtenerId(char pasaporte[]){
+	char * hola = malloc(6*sizeof(char));
+	char consulta[90];
+	snprintf(consulta, sizeof(consulta), "select idPasajero from Pasajero where pasaporte = '%s'", pasaporte);
+	hola = get_dato(consulta);
+	return hola;
+}
+
+
+
+int determina_c(int cantidad, char pasaportes[30][100], int tam, char * codigo_vuelo){
+	char * gua;
+	int ed;
+	for(int i = 0; i < tam; i++){
+		gua = fecha_pas(pasaportes[i]);
+		if(gua == NULL){
+			printf("Ingreso un pasaporte que no existe\n");
+			reservar(codigo_vuelo);
+			break;
+		}
+		ed = edad(gua);
+		if(ed > 3){
+        	cantidad ++;
+        }
+	}
+	return cantidad;
+}
+
+char * fecha_pas(char pasaporte[]){
+	char * hola = malloc(6*sizeof(char));
+	char consulta[90];
+	snprintf(consulta, sizeof(consulta), "select nacimiento from Pasajero where pasaporte = '%s'", pasaporte);
+	hola = get_dato(consulta);
+	return hola;
+}
+
 int edad(char * palabra){
 	time_t t;
   	struct tm *tm;
-	char guarda[90];
+	char guarda[500];
 	char * anno;
-	char guarda_a[80];
+	char guarda_a[500];
 	int annos;
 	int ac;
 	t=time(NULL);
@@ -116,56 +185,72 @@ int edad(char * palabra){
 	return annos;
 }
 
+
 void valida_asiento(int fila, int columna, int cantidad, char * codigo_vuelo){
-	char cambia[90];
 	char usa_re[30];
-	char *resultado = malloc(6*sizeof(char));
-	//memset(cambia,'\0',90);
-	//memset(usa_re,'\0',30);
+	memset(usa_re,'\0',30);
+	char *resultado;
 	resultado = tipo_asiento(fila,columna);
-	strcpy(usa_re, resultado);
 	if (resultado == NULL){
 		printf("El asiento seleccionado no existe\n");
 		guarda_asiento(cantidad,codigo_vuelo);
 	}
-	else if(usa_re[1] == 'O'){
-		printf("El asiento seleccionado ya esta ocupado\n");
-		guarda_asiento(cantidad,codigo_vuelo);
+	else{
+		strcpy(usa_re, resultado);
+		if(usa_re[1] == 'O'){
+			printf("El asiento seleccionado ya esta ocupado\n");
+			guarda_asiento(cantidad,codigo_vuelo);
+		}
+		else if(usa_re[1] == 'L'){
+			cambia_dis(usa_re[0],fila,columna, 1);
+			cantidad -= 1;
+			guarda_asiento(cantidad,codigo_vuelo);
+		}
+		else{
+			printf("Error\n");
+			guarda_asiento(cantidad,codigo_vuelo);
+		}
 	}
-	else if(usa_re[1] == 'L'){
-		snprintf(cambia, sizeof(cambia), "update Asiento set tipo = '%cO' where fila = %i and columna = %i;", usa_re[0],fila, columna);
-		printf("%s\n", cambia);
-		alterar(cambia);
+}
+
+void cambia_dis(char tipo, int fila, int columna, int proc){
+	char consulta[90];
+	char *id;
+	char id_res[9];
+	memset(consulta,'\0',90);
+	id = obtenerId_R();
+	strcpy(id_res,id);
+	if(proc == 1){
+		snprintf(consulta, sizeof(consulta), "update Asiento set tipo = '%cO' where fila = %i and columna = %i;", tipo,fila, columna);
+		alterar(consulta);
+		snprintf(consulta, sizeof(consulta), "update Asiento set Reserva_idReserva = '%s' where fila = %i and columna = %i;", id_res,fila, columna);
+		alterar(consulta);
 		printf("Su asiento ha sido reservado\n");
-		printf("%s\n", codigo_vuelo);
-		cantidad -= 1;
-		guarda_asiento(cantidad,codigo_vuelo);
 	}
 	else{
-		printf("Error\n");
-		guarda_asiento(cantidad,codigo_vuelo);
+		snprintf(consulta, sizeof(consulta), "update Asiento set tipo = '%cL' where fila = %i and columna = %i;", tipo,fila, columna);
+		alterar(consulta);
+		printf("Se libero el asiento\n");
 	}
-} 
-/*
-update Asiento set tipo = 'BO' where fila = 0 and columna = 0;
-*/
+}
 
 char * tipo_asiento(int fila, int columna){
 	char consulta[100];
+	memset(consulta,'\0',100);
 	snprintf(consulta, sizeof(consulta), "select tipo from Asiento where fila = %i and columna = %i;", fila, columna);
 	return get_dato(consulta);
 }
 
-int guarda_asiento(int cantidad, char * codigo_vuelo){
+void guarda_asiento(int cantidad, char * codigo_vuelo){
 	int fila;
 	int columna;
     char camb[9];
 	if (cantidad == 0){
 		printf("Ya no puede seleccionar mas asientos\n");
-		return 0;
 	}
 	else{
 		imprime_asientos(codigo_vuelo);
+		printf("Le quedan %i asientos\n", cantidad);
 		printf("Seleccione su asiento: \n");
 		printf("\n");
 		printf("Seleccione la fila de su asiento: ");
@@ -183,13 +268,34 @@ int guarda_asiento(int cantidad, char * codigo_vuelo){
 	}
 }
 
-char * fecha(){
-  time_t t;
-  struct tm *tm;
-  char fecha_ac[100];
-  char * fecha = fecha_ac;
-  t=time(NULL);
-  tm=localtime(&t);
-  strftime(fecha_ac, 100, "%d/%m/%Y", tm);	
-  return fecha;
+char *genera_codigo(int length) {
+    static int mySeed = 25011984;
+    char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t stringLen = strlen(string);
+    char *randomString = NULL;
+
+    srand(time(NULL) * length + ++mySeed);
+
+    if (length < 1) {
+        length = 1;
+    }
+
+    randomString = malloc(sizeof(char) * (length +1));
+
+    if (randomString) {
+        short key = 0;
+
+        for (int n = 0;n < length;n++) {
+            key = rand() % stringLen;
+            randomString[n] = string[key];
+        }
+
+        randomString[length] = '\0';
+
+        return randomString;
+    }
+    else {
+        printf("Sin memoria");
+        exit(1);
+    }
 }
