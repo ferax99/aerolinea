@@ -1,7 +1,5 @@
 #include "aerolinea.h"
-/*
-i = atoi ("53");
-*/
+
 void submenu_gen(){
     int camb;
     char linea[256];    

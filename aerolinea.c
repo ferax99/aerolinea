@@ -1,17 +1,21 @@
 #include "aerolinea.h"
 
 int main(){
-	/*char clave[256];
-	char cla[5] = "1234";
+	char clave[256];
+	char pred[5] = "1234";
 	char * gg;
+	gg = malloc(256);
 	printf("Ingrese La Clave: ");
-	fgets(clave,sizeof(clave),stdin);
-	sscanf(clave,"%s",gg);
+	scanf("%255s",gg);
 	fflush(stdin);
-	if(strcmp(gg, cla) != 0){
+	strcpy(clave,gg);
+	if(strcmp(clave, pred) != 0){
 		printf("Clave Incorrecta\n");
 		return 0;
-	}*/
+	}
+	printf("Inicio de Sesion Exitoso\n");
+	getchar();
+	getchar();
 	char linea[256];
 	int camb;
 	do {
@@ -46,7 +50,6 @@ int main(){
 	} while(camb != 3) ;
 	printf("Se saldra del programa\n");
 	return 0;
-	consultar_r();
 }
 
 //2385502,1882314,2344905
