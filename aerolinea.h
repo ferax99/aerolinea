@@ -8,7 +8,6 @@
 #include "hpdf.h"
 jmp_buf env;
 
-
 void submenu_op();
 void submenu_gen();
 void registro();
@@ -37,6 +36,14 @@ void consultar_r(char * codigo);
 char * consultar(char * str);
 char * obtenerId_R();
 char *genera_codigo(int length);
+void estadisticas();
+void estado_vuelo();
+int insertar_personas();
+void submenu_avion();
+int borrar_avion();
+void agregar_avion();
+int editar_Avion();
+void consultar_avion();
 //Si se quiere con cuadriculado
 //gcc $(mysql_config --cflags) conexion.c aerolinea.c operativos.c generales.c crear_pdf.c grid_sheet.c $(mysql_config --libs) -lhpdf -lpng -lz -lm -o prueba
 //Si no

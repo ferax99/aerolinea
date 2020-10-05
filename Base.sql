@@ -139,17 +139,18 @@ CREATE TABLE `Reserva` (
   `Pasajero_idPasajero` int(11) NOT NULL,
   PRIMARY KEY (`idReserva`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (1, '1985-11-07 20:52:45', 3);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (2, '1997-05-12 07:35:55', 9);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (3, '2017-01-06 09:49:38', 6);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (4, '2010-02-15 04:13:14', 3);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (5, '1979-05-04 13:48:56', 4);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (6, '1970-10-11 17:52:18', 7);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (7, '1989-02-28 20:47:47', 5);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (8, '1973-05-02 23:32:47', 1);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (9, '2006-11-13 11:10:03', 8);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (10, '2017-03-03 16:54:58', 10);
+delete from Reserva;
+alter table Reserva add column (codigo varchar(45));
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (1, '1985-11-07 20:52:45', 3,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (2, '1997-05-12 07:35:55', 9,'1As342aF');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (3, '2017-01-06 09:49:38', 6,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (4, '2010-02-15 04:13:14', 3,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (5, '1979-05-04 13:48:56', 4,'jdsflkaA');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (6, '1970-10-11 17:52:18', 7,'jds342aA');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (7, '1989-02-28 20:47:47', 5,'jds342aS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (8, '1973-05-02 23:32:47', 1,'jds342aS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (9, '2006-11-13 11:10:03', 8,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (10, '2017-03-03 16:54:58', 10,'ASDSAAW');
 
 
 #
@@ -176,3 +177,18 @@ INSERT INTO `Vuelo` (`idVuelo`, `codigo`, `origen`, `destino`, `salida`, `llegad
 INSERT INTO `Vuelo` (`idVuelo`, `codigo`, `origen`, `destino`, `salida`, `llegada`, `Avion_idAvion`) VALUES (5, '33382', 'Bradtkeville', 'New Reynaton', '1993-03-01 02:48:32', '2020-08-28 08:31:56', 6);
 
 
+
+create view SO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'SO'group by v.idVuelo; 
+create view BO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'BO'group by v.idVuelo; 
+create view EO as select v.idVuelo,count(a.idAsiento) as numero, sum(a.costo) as total from Asiento a inner join 
+Vuelo v on v.idVuelo = a.Vuelo_idVuelo where a.tipo = 'EO'group by v.idVuelo; 
+
+
+create view estado as select v.codigo,v.origen,v.salida ,v.destino,v.llegada, s.total as SO, b.total as BO,e.total as EO from Vuelo v 
+inner join SO s on v.idVuelo = s.idVuelo inner join BO b on s.idVuelo = b.idVuelo inner
+join EO e on s.idVuelo = e.idVuelo;
+
+create view estado2 as select v.codigo,a.tipo,p.nombre,p.pasaporte,r.codigo as codigo_reserva ,a.idAsiento,a.costo from Asiento a inner join Reserva r on a.Reserva_idReserva = r.idReserva
+inner join Pasajero p on p.idPasajero = r.Pasajero_idPasajero inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%o%';
