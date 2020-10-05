@@ -21,6 +21,7 @@ void submenu_gen(){
 				printf("\n");
 				printf("Reservar\n");
 				reservar(codigo);
+				submenu_gen();
 				printf("\n");
 				break;
 			case 2: 

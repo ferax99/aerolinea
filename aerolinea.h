@@ -8,6 +8,12 @@
 #include "hpdf.h"
 jmp_buf env;
 
+typedef struct Avion{
+	char *matricula;	
+	char * modelo ;
+	char *anno ;
+}Avion;
+
 void submenu_op();
 void submenu_gen();
 void registro();
@@ -22,9 +28,11 @@ char * consultar_doc(int seleccion, char * codigo);
 char * tipo_asiento(int fila, int columna);
 void eliminar_r(char *codigo);
 void imprime_asientos(char * codigo_vuelo);
+char * consultar_p(char * str);
 int edad(char * palabra);
 void guarda_asiento(int cantidad, char * codigo_vuelo);
 void alterar(char *str);
+char ** get_columna(char * str);
 char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo);
 char * fecha_pas(char pasaporte[]);
 char * get_dato(char * str);

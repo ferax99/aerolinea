@@ -1,6 +1,4 @@
 #include "aerolinea.h"
-
-
 void consultar_avion(){
 	system("clear");
 	char ** anno = get_columna("select anno from Avion;");
@@ -89,6 +87,7 @@ int editar_Avion(){
 }
 void agregar_avion(){
 	Avion a;
+	char linea[256];
 	int max = 45;
 	 char query[150];
 	system("clear");
@@ -96,10 +95,10 @@ void agregar_avion(){
 	printf("matricula :\n");
 	a.matricula = malloc(256);
   scanf("%255s", a.matricula);
-	printf("modelo  :\n");
+	printf("modelo  : ");
 	a.modelo = malloc(256);
   scanf("%255s", a.modelo);
-	printf("anno :\n");
+	printf("anno : ");
 	a.anno = malloc(256);
   scanf("%255s", a.anno);
 	 snprintf(query, sizeof(query),
@@ -139,13 +138,6 @@ void submenu_avion(){
 		printf("3 - Editar Aviones\n");
 		printf("4 - Eliminar Aviones\n");
 		printf("5 - Regresar\n");
-	    printf("--------Opciones Operativas--------\n");
-	    printf("1 - Informacion de la Aerolinea");
-		printf("2 - Registro de Aviones\n");
-		printf("3 - Carga Usuarios\n");
-		printf("4 - Estado de Vuelo\n");
-		printf("5 - Estadisticas\n");
-		printf("6 - Regresar\n");
 		printf("Elija una opcion: ");
 		scanf("%i",&camb);
 		printf("\n");
@@ -242,10 +234,11 @@ void estado_vuelo(){
 	snprintf(query2, sizeof(query2),"select * from estado2 where codigo = '%s'",codigo );
 	system("clear");
 	printf("codigo | origen     | salida              | destino      | llegada             | SO   | BO   | EO  \n");
-	consultar(query);
+	consultar_p(query);
 	printf("\n###################\n Personas en el vuelo\n###################\n");
 	printf("codigo de vuelo|tipo|nombre|pasaporte|codigo de reserva|numero de Asiento|costo \n");
-	consultar(query2);
+	consultar_p(query2);
+	imprime_asientos(codigo);
 	getchar();
 	getchar();
 	}
@@ -253,35 +246,34 @@ void estadisticas(){
 	system("clear");
 	printf("Top 3 de vuelos de mayor venta (de mayor a menor)\n");
 	printf("codigo|total \n");
-	consultar("select v.codigo, sum(a.costo) as total from Asiento a inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%O%' group by v.codigo desc limit 3;");
+	consultar_p("select v.codigo, sum(a.costo) as total from Asiento a inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%O%' group by v.codigo desc limit 3;");
 	printf("\n\nTop 3 de vuelos con mayor cantidad de personas (de mayor a menor)\n");
 	printf("codigo|personas \n");
-	consultar("select v.codigo, count(v.codigo)  as personas from Vuelo v inner join Asiento a on v.idVuelo = a.Vuelo_idVuelo where a.tipo like '%O%' group by v.codigo limit 3 ;");
+	consultar_p("select v.codigo, count(v.codigo)  as personas from Vuelo v inner join Asiento a on v.idVuelo = a.Vuelo_idVuelo where a.tipo like '%O%' group by v.codigo limit 3 ;");
 	getchar();
 	getchar();
 	
 	}
 
 void submenu_op(){
+	char linea[256];
     char camb;
 	do {
 		system("clear");
 	    printf("--------Opciones Operativas--------\n");
 	    printf("1 - Informacion de la Aerolinea\n");
-		printf("2 - Informacion de Aviones\n");
+		printf("2 - Aviones\n");
 		printf("3 - Carga Usuarios\n");
 		printf("4 - Estado de Vuelo\n");
 		printf("5 - Estadisticas\n");
 		printf("6 - Salir\n");
-	    printf("1 - Ingresar Avion");
-		printf("2 - Eliminar Avion\n");
-		printf("3 - Mostrar Aviones\n");
-		printf("4 - Regresar\n");
 		printf("Elija una opcion: ");
-		scanf("%i",&camb);
+		fgets(linea,sizeof(linea),stdin);
+		sscanf(linea,"%c",&camb);
 		switch(camb) {
 		    case '1':
-		        consultar("select nombre,hub from Aerolinea where idAerolinea  = 1;");
+				printf("nombre            | hub         \n");
+		        consultar_p("select nombre,hub from Aerolinea where idAereolinea  = 1;");
 		        getchar();
 		        getchar();
 				break;
@@ -302,5 +294,5 @@ void submenu_op(){
 			default:
 				printf("Error\n");
 		}
-	} while(camb != 6) ;
+	} while(camb != '6') ;
 }

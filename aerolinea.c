@@ -4,6 +4,7 @@ int main(){
 	char linea[256];
 	int camb;
 	do {
+		system("clear");
 		printf("1 - Opciones Operativas\n");
 		printf("2 - Opciones Generales\n");
 		printf("3 - Salir\n");
@@ -31,13 +32,8 @@ int main(){
 				printf("Error\n");
 		}
 	} while(camb != 3) ;
-	printf("Se saldra del programa");
+	printf("Se saldra del programa\n");
 	return 0;
-	//reservar("95475");
-	//cambia_dis('B',0,0,2);
-	//imprime_asientos("95475");
-
-//crear_doc("jdsflkaS");
 }
 
 

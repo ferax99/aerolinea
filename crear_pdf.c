@@ -92,5 +92,8 @@ int crear_doc (char * codigo){
     }
     HPDF_SaveToFile (pdf, fname);
     HPDF_Free (pdf);
+    printf("Se ha generado su comprobante en la carpeta...\n");
+	getchar();
+	getchar();
     return 0;
 }
