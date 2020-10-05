@@ -19,20 +19,15 @@ void alterar(char *str){
       /* Connect to database */
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
-        printf("kkkk\n");
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
 
       /* send SQL query */
       if (mysql_query(conn, str)) {
-        printf("ppppp\n");
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
-      printf("hola\n");
-      mysql_free_result(res);
-      printf("gggs\n");
       mysql_close(conn);
 	
 	}  
@@ -79,6 +74,7 @@ char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacio
                     "Monto de la reservacion"};
 */
 char * get_dato(char * str){
+  //printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\n");
      conn = mysql_init(NULL);
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
@@ -89,13 +85,13 @@ char * get_dato(char * str){
           exit(1);}
 
      res = mysql_use_result(conn);
-     char *dato= NULL;
+     char *dato = NULL;
      int x = mysql_num_fields(res);
-     char pba [10];
+     char pba [500];
+     memset(pba,'\0',500);
     while ((row = mysql_fetch_row(res)) ){
         strcat(pba, row[0]);
         dato = pba;
-
         }
     mysql_free_result(res);
     mysql_close(conn);
@@ -163,7 +159,7 @@ char * consultar_doc(int seleccion, char * codigo){
     return resultado;
   }
   else if(seleccion == 1){
-    snprintf(consulta, sizeof(consulta), "select fecha from Reserva where codigo = '%s'", codigo);
+    snprintf(consulta, sizeof(consulta), "select fecha from Reserva where codigo = '%s' limit 1", codigo);
     resultado = consultar(consulta);
     //printf("%s\n", resultado);
     return resultado;
