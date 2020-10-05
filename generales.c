@@ -4,8 +4,7 @@ i = atoi ("53");
 */
 void submenu_gen(){
     int camb;
-    char linea[256];
-    char *codigo = "95475";
+    char linea[256];    
 	do {
 		system("clear");
 		printf("--------Opciones Generales--------\n");
@@ -16,28 +15,28 @@ void submenu_gen(){
 		printf("Elija una opcion: ");
 		fgets(linea,sizeof(linea),stdin);
 		sscanf(linea,"%i",&camb);
+		fflush(stdin);
 		switch(camb) {
 			case 1: 
 				system("clear");
 				printf("\n");
 				printf("Reservar\n");
-				reservar(codigo);
+				reservar();
 				//submenu_gen();
 				printf("\n");
 				break;
 			case 2: 
 				system("clear");
 				printf("\n");
-				printf("Cual reserva quiere consultar: ");
-				scanf("%s", codigo);
-				printf("\n");
-				consultar_r(codigo);
+				consultar_r();
+				getchar();
+				getchar();
 				break;
 			case 3: 
 			    system("clear");
 				printf("\n");
 				printf("Se eliminara la reserva\n");
-				eliminar_r(codigo);
+				eliminar_r();
 				printf("\n");
 				break;
 			case 4:
@@ -49,9 +48,10 @@ void submenu_gen(){
 	} while(camb != 4) ;
 }
 
-char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo){
+char * verifica_p(char *pasaportes, int cantidad){
 	char guarda_p[100];
-	char uno[30];
+	char linea[256];
+	Codigo c;
 	char pasap[30][100];
 	char * codigo;
 	int tam = 0;
@@ -62,22 +62,32 @@ char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo){
 		pas = strtok(NULL, ",");    
 		tam++; 
     } 
-    cantidad = determina_c(cantidad, pasap,tam,codigo_vuelo);
+    cantidad = determina_c(cantidad, pasap,tam);
     codigo = insertar_reserva(pasap,tam);
-    guarda_asiento(cantidad, codigo_vuelo);
+    c.codigo = malloc(256);
+    printf("Ingrese el codigo de vuelo: "); 
+    fgets(linea,sizeof(linea),stdin);
+    sscanf(linea,"%s",c.codigo);
+    guarda_asiento(cantidad, c.codigo);
     crear_doc(codigo);
 }
 
-void consultar_r(char *codigo){
+void consultar_r(){
 	int cont;
+	Codigo c;
+	char linea[256];
 	char * guarda;
 	char mostrar[90];
+	c.codigo = malloc(256);
+	printf("Ingrese el codigo de la Reserva: "); 
+    scanf("%255s",c.codigo);
+    fflush(stdin);
 	char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
                     "Codigo de Vuelo", "Lugar y Fecha de salida", "Lugar y Fecha de arribo",
                     "Numero de asientos de la reservacion", "Personas de la reservacion", 
                     "Monto de la reservacion"};
     while(tags[cont][0] != 0){
-    	guarda = consultar_doc(cont, codigo);
+    	guarda = consultar_doc(cont, c.codigo);
     	strcpy(mostrar,guarda);
     	printf("%s :", tags[cont]);
     	printf("%s\n", mostrar);
@@ -87,20 +97,25 @@ void consultar_r(char *codigo){
 	
 }
 
-void eliminar_r(char *codigo){
+void eliminar_r(){
 	char consulta[90];
-	snprintf(consulta, sizeof(consulta), "Delete from Reserva where codigo  = '%s'", codigo);
+	char linea[256];
+	Codigo c;
+	printf("Ingrese el codigo de la Reserva: "); 
+    fgets(linea,sizeof(linea),stdin);
+    sscanf(linea,"%s",c.codigo);
+	snprintf(consulta, sizeof(consulta), "Delete from Reserva where codigo  = '%s'", c.codigo);
 	alterar(consulta);
 }
 
-void reservar(char * codigo_vuelo){
+void reservar(){
 	char linea[256];
 	char *pasaportes;
 	pasaportes = malloc(256);
 	printf("Ingrese los pasaportes(Formato: xxxxxxxx,xxxxxxx): ");
 	fgets(linea,sizeof(linea),stdin);
 	sscanf(linea,"%s",pasaportes);
-	verifica_p(pasaportes,0,codigo_vuelo);
+	verifica_p(pasaportes,0);
 }
 char * insertar_reserva(char pasaportes[30][100], int tam){
 	char consulta[90];
@@ -109,7 +124,6 @@ char * insertar_reserva(char pasaportes[30][100], int tam){
 	char * codigo;
 	codigo = genera_codigo(8);
 	for(int i = 0; i < tam; i++){
-		printf("%i\n", i);
 		id = obtenerId(pasaportes[i]);
 		strcpy(id_e,id);
 		snprintf(consulta, sizeof(consulta), "insert into Reserva (fecha,codigo,Pasajero_idPasajero) values (NOW(), '%s',%s)", codigo,id_e);
@@ -132,14 +146,14 @@ char * obtenerId(char pasaporte[]){
 
 
 
-int determina_c(int cantidad, char pasaportes[30][100], int tam, char * codigo_vuelo){
+int determina_c(int cantidad, char pasaportes[30][100], int tam){
 	char * gua;
 	int ed;
 	for(int i = 0; i < tam; i++){
 		gua = fecha_pas(pasaportes[i]);
 		if(gua == NULL){
 			printf("Ingreso un pasaporte que no existe\n");
-			reservar(codigo_vuelo);
+			reservar();
 			break;
 		}
 		ed = edad(gua);

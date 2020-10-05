@@ -14,6 +14,10 @@ typedef struct Avion{
 	char *anno ;
 }Avion;
 
+typedef struct Codigo{
+	char *codigo;	
+}Codigo;
+
 void submenu_op();
 void submenu_gen();
 void registro();
@@ -23,24 +27,24 @@ void error_handler (HPDF_STATUS   error_no, HPDF_STATUS   detail_no, void *user_
 void show_desciption(HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *text);
 int crear_doc(char * codigo);
 void valida_asiento(int fila, int columna, int cantidad, char * codigo_vuelo);
-void reservar(char * codigo_vuelo);
+void reservar();
 char * consultar_doc(int seleccion, char * codigo);
 char * tipo_asiento(int fila, int columna);
-void eliminar_r(char *codigo);
+void eliminar_r();
 void imprime_asientos(char * codigo_vuelo);
 char * consultar_p(char * str);
 int edad(char * palabra);
 void guarda_asiento(int cantidad, char * codigo_vuelo);
 void alterar(char *str);
 char ** get_columna(char * str);
-char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo);
+char * verifica_p(char *pasaportes, int cantidad);
 char * fecha_pas(char pasaporte[]);
 char * get_dato(char * str);
 void cambia_dis(char tipo, int fila, int columna, int proc);
 char * insertar_reserva(char pasaportes[30][100], int tam);
-int determina_c(int cantidad, char pasaportes[30][100], int tam, char * codigo_vuelo);
+int determina_c(int cantidad, char pasaportes[30][100], int tam);
 char * obtenerId(char pasaporte[]);
-void consultar_r(char * codigo);
+void consultar_r();
 char * consultar(char * str);
 char * obtenerId_R();
 char *genera_codigo(int length);
