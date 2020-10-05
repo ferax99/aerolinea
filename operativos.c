@@ -36,6 +36,7 @@ int editar_Avion(){
 	if(get_dato( valida)== NULL) {printf("\nentrada invalida\n");getchar();getchar();return 0 ;}
     int camb;
 	do {
+<<<<<<< HEAD
 		system("clear");
 		printf("--------Atributos de %s--------\n",a.matricula);
 		printf("1 - matricula\n");
@@ -139,6 +140,15 @@ void submenu_avion(){
 		printf("3 - Editar Aviones\n");
 		printf("4 - Eliminar Aviones\n");
 		printf("5 - Regresar\n");
+=======
+	    printf("--------Opciones Operativas--------\n");
+	    printf("1 - Informacion de la Aerolinea");
+		printf("2 - Registro de Aviones\n");
+		printf("3 - Carga Usuarios\n");
+		printf("4 - Estado de Vuelo\n");
+		printf("5 - Estadisticas\n");
+		printf("6 - Regresar\n");
+>>>>>>> 0d7f7d0147f4e223585fed0a75ef8311bdfcf0cd
 		printf("Elija una opcion: ");
 		scanf("%i",&camb);
 		printf("\n");
@@ -260,12 +270,19 @@ void submenu_op(){
 	do {
 		system("clear");
 	    printf("--------Opciones Operativas--------\n");
+<<<<<<< HEAD
 	    printf("1 - Informacion de la Aerolinea\n");
 		printf("2 - Informacion de Aviones\n");
 		printf("3 - Carga Usuarios\n");
 		printf("4 - Estado de Vuelo\n");
 		printf("5 - Estadisticas\n");
 		printf("6 - Salir\n");
+=======
+	    printf("1 - Ingresar Avion");
+		printf("2 - Eliminar Avion\n");
+		printf("3 - Mostrar Aviones\n");
+		printf("4 - Regresar\n");
+>>>>>>> 0d7f7d0147f4e223585fed0a75ef8311bdfcf0cd
 		printf("Elija una opcion: ");
 		scanf("%i",&camb);
 		switch(camb) {
