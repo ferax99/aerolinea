@@ -8,21 +8,6 @@
 #include "hpdf.h"
 jmp_buf env;
 
-/*struct tags{
-	char tags[10][40];
-
-}etiq;
-
-struct etiq tag;
-etiq.tag[0] = "Identificador";
-tag[1] = "Fecha Y Hora de Reservacion";
-tag[2] = "Informacion de la Aerolinea";
-tag[3] = "Codigo de Vuelo";
-tag[4] = "Lugar y Fecha de salida";
-tag[5] = "Lugar y Fecha de arribo";
-tag[6] = "Numero de asientos de la reservacion";
-tag[7] = "Personas de la reservacion"; 
-tag[8] = "Monto de la reservacion";*/
 
 void submenu_op();
 void submenu_gen();
@@ -31,19 +16,27 @@ char * fecha();
 void print_grid  (HPDF_Doc pdf, HPDF_Page page);
 void error_handler (HPDF_STATUS   error_no, HPDF_STATUS   detail_no, void *user_data);
 void show_desciption(HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *text);
-int crear_doc();
+int crear_doc(char * codigo);
 void valida_asiento(int fila, int columna, int cantidad, char * codigo_vuelo);
-void insertar_reserva(char * codigo_vuelo);
+void reservar(char * codigo_vuelo);
 char * consultar_doc(int seleccion, char * codigo);
 char * tipo_asiento(int fila, int columna);
 void eliminar_r(char *codigo);
 void imprime_asientos(char * codigo_vuelo);
 int edad(char * palabra);
-int guarda_asiento(int cantidad, char * codigo_vuelo);
+void guarda_asiento(int cantidad, char * codigo_vuelo);
 void alterar(char *str);
+char * verifica_p(char *pasaportes, int cantidad, char * codigo_vuelo);
+char * fecha_pas(char pasaporte[]);
 char * get_dato(char * str);
+void cambia_dis(char tipo, int fila, int columna, int proc);
+char * insertar_reserva(char pasaportes[30][100], int tam);
+int determina_c(int cantidad, char pasaportes[30][100], int tam, char * codigo_vuelo);
+char * obtenerId(char pasaporte[]);
 void consultar_r(char * codigo);
 char * consultar(char * str);
+char * obtenerId_R();
+char *genera_codigo(int length);
 //Si se quiere con cuadriculado
 //gcc $(mysql_config --cflags) conexion.c aerolinea.c operativos.c generales.c crear_pdf.c grid_sheet.c $(mysql_config --libs) -lhpdf -lpng -lz -lm -o prueba
 //Si no
