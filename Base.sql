@@ -139,17 +139,18 @@ CREATE TABLE `Reserva` (
   `Pasajero_idPasajero` int(11) NOT NULL,
   PRIMARY KEY (`idReserva`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (1, '1985-11-07 20:52:45', 3);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (2, '1997-05-12 07:35:55', 9);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (3, '2017-01-06 09:49:38', 6);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (4, '2010-02-15 04:13:14', 3);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (5, '1979-05-04 13:48:56', 4);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (6, '1970-10-11 17:52:18', 7);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (7, '1989-02-28 20:47:47', 5);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (8, '1973-05-02 23:32:47', 1);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (9, '2006-11-13 11:10:03', 8);
-INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`) VALUES (10, '2017-03-03 16:54:58', 10);
+delete from Reserva;
+alter table Reserva add column (codigo varchar(45));
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (1, '1985-11-07 20:52:45', 3,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (2, '1997-05-12 07:35:55', 9,'1As342aF');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (3, '2017-01-06 09:49:38', 6,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (4, '2010-02-15 04:13:14', 3,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (5, '1979-05-04 13:48:56', 4,'jdsflkaA');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (6, '1970-10-11 17:52:18', 7,'jds342aA');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (7, '1989-02-28 20:47:47', 5,'jds342aS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (8, '1973-05-02 23:32:47', 1,'jds342aS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (9, '2006-11-13 11:10:03', 8,'jdsflkaS');
+INSERT INTO `Reserva` (`idReserva`, `fecha`, `Pasajero_idPasajero`, `codigo`) VALUES (10, '2017-03-03 16:54:58', 10,'ASDSAAW');
 
 
 #
