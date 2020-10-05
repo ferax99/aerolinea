@@ -7,6 +7,7 @@ void submenu_gen(){
     char linea[256];
     char *codigo = "95475";
 	do {
+		system("clear");
 		printf("--------Opciones Generales--------\n");
 		printf("1 - Reservacion de Vuelo\n");
 		printf("2 - Consultar Reservas\n");
@@ -21,7 +22,7 @@ void submenu_gen(){
 				printf("\n");
 				printf("Reservar\n");
 				reservar(codigo);
-				submenu_gen();
+				//submenu_gen();
 				printf("\n");
 				break;
 			case 2: 
@@ -93,15 +94,12 @@ void eliminar_r(char *codigo){
 }
 
 void reservar(char * codigo_vuelo){
-	char line[256];
+	char linea[256];
 	char *pasaportes;
-	char *codigo;
 	pasaportes = malloc(256);
 	printf("Ingrese los pasaportes(Formato: xxxxxxxx,xxxxxxx): ");
-	fgets(line,sizeof(line),stdin);
-	//scanf("%s\n", pasaportes);
-	sscanf(line,"%s",pasaportes);
-	//printf("%255s\n", pasaportes);
+	fgets(linea,sizeof(linea),stdin);
+	sscanf(linea,"%s",pasaportes);
 	verifica_p(pasaportes,0,codigo_vuelo);
 }
 char * insertar_reserva(char pasaportes[30][100], int tam){
@@ -111,6 +109,7 @@ char * insertar_reserva(char pasaportes[30][100], int tam){
 	char * codigo;
 	codigo = genera_codigo(8);
 	for(int i = 0; i < tam; i++){
+		printf("%i\n", i);
 		id = obtenerId(pasaportes[i]);
 		strcpy(id_e,id);
 		snprintf(consulta, sizeof(consulta), "insert into Reserva (fecha,codigo,Pasajero_idPasajero) values (NOW(), '%s',%s)", codigo,id_e);
@@ -122,13 +121,6 @@ char * insertar_reserva(char pasaportes[30][100], int tam){
 char * obtenerId_R(){
 	return get_dato("select max(idReserva) from Reserva;");
 }
-
-/*char * obtenerId_V(char * codigo_vuelo){
-	char consulta[90];
-	snprintf(consulta, sizeof(consulta), "select idVuelo from Vuelo where 
-	codigo = '%s'", codigo_vuelo);
-	return get_dato(consulta);
-}*/
 
 char * obtenerId(char pasaporte[]){
 	char * hola = malloc(6*sizeof(char));

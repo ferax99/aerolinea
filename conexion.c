@@ -260,14 +260,14 @@ char * consultar_doc(int seleccion, char * codigo){
     return resultado;
   }
   else if(seleccion == 6){
-    snprintf(consulta, sizeof(consulta), "select Pasajero.nombre, Pasajero.apellido1, Pasajero.apellido2 from (((((Aerolinea as aero inner join Avion on aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') inner join Pasajero on Pasajero_idPasajero = idPasajero)", codigo);
+    snprintf(consulta, sizeof(consulta), "select Pasajero.nombre, Pasajero.apellido1, Pasajero.apellido2 from Pasajero inner join Reserva on idPasajero = Pasajero_idPasajero and codigo = '%s'", codigo);
     resultado = consultar(consulta);
     //printf("%s\n", resultado);
     return resultado;
   }
   
   else if(seleccion == 7){
-    snprintf(consulta, sizeof(consulta), "select count(Pasajero.idPasajero) from (((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') inner join Pasajero on Pasajero_idPasajero = idPasajero)", codigo);
+    snprintf(consulta, sizeof(consulta), "select count(Reserva.Pasajero_idPasajero) from Reserva where codigo = '%s'", codigo);
     resultado = consultar(consulta);
     //printf("%s\n", resultado);
     return resultado;
