@@ -246,14 +246,15 @@ void estadisticas(){
 	system("clear");
 	printf("Top 3 de vuelos de mayor venta (de mayor a menor)\n");
 	printf("codigo|total \n");
-	consultar_p("select v.codigo, sum(a.costo) as total from Asiento a inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%O%' group by v.codigo desc limit 3;");
+	consultar("select v.codigo, sum(a.costo) as total from Asiento a inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%O%' group by v.codigo desc order by total desc limit 3;");
 	printf("\n\nTop 3 de vuelos con mayor cantidad de personas (de mayor a menor)\n");
-	printf("codigo|personas \n");
-	consultar_p("select v.codigo, count(v.codigo)  as personas from Vuelo v inner join Asiento a on v.idVuelo = a.Vuelo_idVuelo where a.tipo like '%O%' group by v.codigo limit 3 ;");
+	printf("codigo|personas \n\n");
+	consultar("select v.codigo, count(v.codigo)  as personas from Vuelo v inner join Asiento a on v.idVuelo = a.Vuelo_idVuelo where a.tipo like '%O%' group by v.codigo  order by personas desc limit 3;");
 	getchar();
 	getchar();
 	
 	}
+
 
 void submenu_op(){
 	char linea[256];

@@ -55,6 +55,26 @@ Insert into Asiento() values(17,'EL',1456,4,0,3,0) ;
 Insert into Asiento() values(18,'EL',1031,4,1,3,0) ;
 Insert into Asiento() values(19,'EO',884,4,2,3,10);
 Insert into Asiento() values(20,'EL',1444,4,3,3,0) ;
+Insert into Asiento() values(21,'BL',1094,0,0,1,0); 
+Insert into Asiento() values(22,'BL',177,0,1,1,0) ;
+Insert into Asiento() values(23,'BO',966,0,2,1,5); 
+Insert into Asiento() values(24,'BL',423,0,3,1,0) ;
+Insert into Asiento() values(25,'SL',240,1,0,1,0) ;
+Insert into Asiento() values(26,'SO',765,1,1,1,1) ;
+Insert into Asiento() values(27,'SL',222,1,2,1,0) ;
+Insert into Asiento() values(28,'SO',999,1,3,1,0) ;
+Insert into Asiento() values(29,'SL',497,2,0,1,0) ;
+Insert into Asiento() values(30,'SO',1112,2,1,1,4) ;
+Insert into Asiento() values(31,'SO',1572,2,2,1,9) ;
+Insert into Asiento() values(32,'SL',4234,2,3,1,0) ;
+Insert into Asiento() values(33,'EL',1867,3,0,1,0) ;
+Insert into Asiento() values(34,'EO',389,3,1,1,5) ;
+Insert into Asiento() values(35,'EL',161,3,2,1,0) ;
+Insert into Asiento() values(36,'EO',1983,3,3,1,6) ;
+Insert into Asiento() values(37,'EL',1456,4,0,1,0) ;
+Insert into Asiento() values(38,'EL',1233,4,1,1,0) ;
+Insert into Asiento() values(39,'EO',884,4,2,1,10);
+Insert into Asiento() values(40,'EL',1444,4,3,1,0) ;
 
 #
 # TABLE STRUCTURE FOR: Avion
