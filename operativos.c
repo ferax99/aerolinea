@@ -242,7 +242,7 @@ int insertar_personas(){
 			   if(!(strcmp(arr[i-2],"H")==0 || strcmp(arr[i-2],"M") ==0)) {printf("ERROR AL INSERTAR, %s tiene el genero no valido '%s'     \n",arr[i-5],arr[i-2]);continue ;} 
 			snprintf(query, sizeof(query),
 			 "insert into Pasajero(pasaporte,nombre,apellido1,apellido2,sexo,nacimiento) values ('%s','%s','%s','%s','%s','%s')", arr[i-6],arr[i-5],arr[i-4],arr[i-3],arr[i-2],arr[i-1]);
-			//alterar(query);
+			alterar(query);
 			printf("%s insertado con exito...\n",arr[i-5]);
 			memset(query, 0, sizeof(query)); 
 			memset(pasaporte, 0, sizeof(pasaporte)); 
