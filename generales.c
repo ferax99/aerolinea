@@ -1,5 +1,9 @@
 #include "aerolinea.h"
-
+/*
+Submenu de funciones generales, se puede llamar a reservar, consultar reserva y eliminar reserva(modificacion directa a la base)
+E:Void
+S:Void
+*/
 void submenu_gen(){
     int camb;
     char linea[256];    
@@ -20,7 +24,6 @@ void submenu_gen(){
 				printf("\n");
 				printf("Reservar\n");
 				reservar();
-				//submenu_gen();
 				printf("\n");
 				break;
 			case 2: 
@@ -35,6 +38,8 @@ void submenu_gen(){
 				printf("\n");
 				printf("Se eliminara la reserva\n");
 				eliminar_r();
+				getchar();
+				getchar();
 				printf("\n");
 				break;
 			case 4:
@@ -45,7 +50,12 @@ void submenu_gen(){
 		}
 	} while(camb != 4) ;
 }
-
+/*
+Funcion que se encarga de separar los pasaportes y guardarlos en un arreglo
+E: char *pasaportes, input del usuario donde se pusieron todos los pasaportes. 
+int cantidad, el cual es la cantidad de asientos que va a tener disponible para reservar(la funcion inical se llama con 0).
+S: Void
+*/
 char * verifica_p(char *pasaportes, int cantidad){
 	char guarda_p[100];
 	char linea[256];
@@ -69,7 +79,11 @@ char * verifica_p(char *pasaportes, int cantidad){
     guarda_asiento(cantidad, c.codigo);
     crear_doc(codigo);
 }
-
+/*
+Funcion que consulta en la base los datos de una reserva especifica
+E: Void
+S: Void
+*/
 void consultar_r(){
 	int cont;
 	Codigo c;
@@ -94,7 +108,11 @@ void consultar_r(){
     }
 	
 }
-
+/*
+Funcion que elimina en la base los datos de una reserva especifica(por codigo)
+E: Void
+S: Void
+*/
 void eliminar_r(){
 	char consulta[90];
 	char linea[256];
@@ -105,8 +123,13 @@ void eliminar_r(){
     fflush(stdin);
 	snprintf(consulta, sizeof(consulta), "Delete from Reserva where codigo  = '%s'", c.codigo);
 	alterar(consulta);
+	printf("Se ha eliminado con exito\n");
 }
-
+/*
+Funcion que recibe el input del usuario y, con el llama a la funcion verifica_p.
+E: Void
+S: Void
+*/
 void reservar(){
 	char linea[256];
 	char *pasaportes;
@@ -116,6 +139,12 @@ void reservar(){
 	sscanf(linea,"%s",pasaportes);
 	verifica_p(pasaportes,0);
 }
+/*
+Funcion que asocia los pasajeros especificados con el codigo de reserva, inserta cada relacion en la base con la fecha actual
+E: char pasasportes[30][100], arreglo de pasaportes.
+   int tam, 
+S: El codio de la reserva
+*/
 char * insertar_reserva(char pasaportes[30][100], int tam){
 	char consulta[90];
 	char * id;
@@ -130,21 +159,33 @@ char * insertar_reserva(char pasaportes[30][100], int tam){
 	}
 	return codigo;
 }
-
+/*
+Obtiene el id de la ultima reserva insertada, y lo retorna
+E: Void
+S: char * id 
+*/
 char * obtenerId_R(){
 	return get_dato("select max(idReserva) from Reserva;");
 }
-
+/*
+Obtiene el id de un Pasajero en especifico
+E: char pasaporte[], en el que se guarda un pasaporte especifico
+S: char * id, donde se guarda el id obtenido
+*/
 char * obtenerId(char pasaporte[]){
-	char * hola = malloc(6*sizeof(char));
+	char * id = malloc(6*sizeof(char));
 	char consulta[90];
 	snprintf(consulta, sizeof(consulta), "select idPasajero from Pasajero where pasaporte = '%s'", pasaporte);
-	hola = get_dato(consulta);
-	return hola;
+	id = get_dato(consulta);
+	return id;
 }
-
-
-
+/*
+Funcion que valida la edad del pasajero y determina si este ocupa un asiento
+E: int cantidad, donde se va guardando la cantidad de asientos que se necesitan
+   char pasaportes[30][100] donde se mandan todos los pasaportes
+   int tam, el cual incluye el tamano del arreglo
+S: cantidad de asientos necesarios
+*/
 int determina_c(int cantidad, char pasaportes[30][100], int tam){
 	char * gua;
 	int ed;
@@ -162,15 +203,23 @@ int determina_c(int cantidad, char pasaportes[30][100], int tam){
 	}
 	return cantidad;
 }
-
+/*
+Funcion que devuelve la fecha de nacimineto
+E: char pasaporte[], un pasaporte
+S: Su fecha de nacimineto
+*/
 char * fecha_pas(char pasaporte[]){
-	char * hola = malloc(6*sizeof(char));
+	char * nac = malloc(6*sizeof(char));
 	char consulta[90];
 	snprintf(consulta, sizeof(consulta), "select nacimiento from Pasajero where pasaporte = '%s'", pasaporte);
-	hola = get_dato(consulta);
-	return hola;
+	nac = get_dato(consulta);
+	return nac;
 }
-
+/*
+Funcion que calcula la edad utilizando dos fechas
+E: char * palabra, una fecha
+S: los annos
+*/
 int edad(char * palabra){
 	time_t t;
   	struct tm *tm;
@@ -190,8 +239,11 @@ int edad(char * palabra){
 	annos = ac - annos;
 	return annos;
 }
-
-
+/*
+Funcion que valida si el asiento que se eligio esta libre o ocupado
+E: la fila del asiento, la columna del asiento, la cantidad de asientos restantes, y el codigo de vuelo
+S: Void
+*/
 void valida_asiento(int fila, int columna, int cantidad, char * codigo_vuelo){
 	char usa_re[30];
 	memset(usa_re,'\0',30);
@@ -218,7 +270,11 @@ void valida_asiento(int fila, int columna, int cantidad, char * codigo_vuelo){
 		}
 	}
 }
-
+/*
+Funcion que cambia la disponibilidad de un asiento en la base
+E: El tipo de asiento, la fila, la columna, y que tipo de procedimiento se quiere aplicar, liberar o ocupar
+S: Void
+*/
 void cambia_dis(char tipo, int fila, int columna, int proc){
 	char consulta[90];
 	char *id;
@@ -239,14 +295,22 @@ void cambia_dis(char tipo, int fila, int columna, int proc){
 		printf("Se libero el asiento\n");
 	}
 }
-
+/*
+Funcion que encuentra el tipo de asiento utilizando una fila y columna
+E: la fila y columna
+S: char * tipo, guardando el tipo del asiento
+*/
 char * tipo_asiento(int fila, int columna){
 	char consulta[100];
 	memset(consulta,'\0',100);
 	snprintf(consulta, sizeof(consulta), "select tipo from Asiento where fila = %i and columna = %i;", fila, columna);
 	return get_dato(consulta);
 }
-
+/*
+Funcion que muestra la matriz al usuario y recibe su input
+E: la cantidad de asientos disponibles, codigo del vuelo sobre el que se quiere reservar
+S: Void
+*/
 void guarda_asiento(int cantidad, char * codigo_vuelo){
 	int fila;
 	int columna;
@@ -273,30 +337,34 @@ void guarda_asiento(int cantidad, char * codigo_vuelo){
 		valida_asiento(fila, columna,cantidad,codigo_vuelo);
 	}
 }
-
-char *genera_codigo(int length) {
+/*
+Funcion que genera un codigo al azar\
+E: tamano del codigo
+S: char * codigo, donde se guarda el codigo generado
+*/
+char *genera_codigo(int tam) {
     static int mySeed = 25011984;
     char *string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     size_t stringLen = strlen(string);
     char *randomString = NULL;
 
-    srand(time(NULL) * length + ++mySeed);
+    srand(time(NULL) * tam + ++mySeed);
 
-    if (length < 1) {
-        length = 1;
+    if (tam < 1) {
+        tam = 1;
     }
 
-    randomString = malloc(sizeof(char) * (length +1));
+    randomString = malloc(sizeof(char) * (tam +1));
 
     if (randomString) {
         short key = 0;
 
-        for (int n = 0;n < length;n++) {
+        for (int n = 0;n < tam;n++) {
             key = rand() % stringLen;
             randomString[n] = string[key];
         }
 
-        randomString[length] = '\0';
+        randomString[tam] = '\0';
 
         return randomString;
     }

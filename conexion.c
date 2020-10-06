@@ -3,51 +3,53 @@
   MYSQL *conn;
       MYSQL_RES *res;
       MYSQL_ROW row;
-
+      //Datos de Mysql
       char *server = "localhost";
       char *user = "fred";
       //set the password for mysql server here
       char *password = ""; /* set me first */
       char *database = "Vuelos";
- 
-
-
+/*
+Funcion que ejecuta un query en la base
+E: char * str, query de mysql
+S: Void
+*/
 void alterar(char *str){
   
    conn = mysql_init(NULL);
 
-      /* Connect to database */
+      // Conectarse a la base de datos 
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
 
-      /* send SQL query */
+      //Mandar el query a Mysql
       if (mysql_query(conn, str)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
-       //mysql_free_result(res);
       mysql_close(conn);
   
   }  
-
-
-      
-
+/*
+Funcion para consultar en la base y retornar todos los datos obtenidos por "|"
+E: char *str, query de mysql
+S: char * resul, que apunta al arreglo resultado, que contiene todos los datos obtenidos
+*/
 char * consultar(char * str){
   char resultado[1000]= "";
   char * resul = resultado;
    conn = mysql_init(NULL);
-      // Connect to database 
+      // Conectarse a la base de datos 
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
 
-      // send SQL query
+      //Mandar el query a Mysql
       if (mysql_query(conn, str)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
@@ -70,19 +72,22 @@ char * consultar(char * str){
       mysql_free_result(res);
       mysql_close(conn);
   }
-
+/*
+Funcion que consulta varios datos en la base y los va imprimiendo 
+E: char *str, query de mysql
+S: char * resul, que apunta al arreglo resultado, que contiene todos los datos obtenidos
+*/
 char * consultar_p(char * str){
   char resultado[1000]= "";
   char * resul = resultado;
    conn = mysql_init(NULL);
-      // Connect to database 
       if (!mysql_real_connect(conn, server,
             user, password, database, 0, NULL, 0)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
       }
 
-      // send SQL query
+      //Mandar el query a Mysql
       if (mysql_query(conn, str)) {
           fprintf(stderr, "%s\n", mysql_error(conn));
           exit(1);
@@ -105,9 +110,11 @@ char * consultar_p(char * str){
       return resul;
       //cerrar la conexion 
   }
-
-
-
+/*
+Funcion que trae todos los datos de una columna
+E: char *str, que contiene el query de mysql
+S: char **to_be_returned, donde se guardaron todos los datos
+*/
 char ** get_columna(char * str){
    conn = mysql_init(NULL);
    char *ary[100] ;
@@ -131,7 +138,7 @@ char ** get_columna(char * str){
       
     }
     ary[con]= NULL;
-  char **strings = ary; // a pointer to a pointer, for easy iteration
+  char **strings = ary;
   char **to_be_returned = malloc(sizeof(char*) * 60);
   int i = 0;
   while(*strings) {
@@ -143,7 +150,11 @@ char ** get_columna(char * str){
  mysql_free_result(res);
       mysql_close(conn);
   return to_be_returned;}
-
+/*
+Funcion que obtiene un solo dato de un query
+E: char *str, query mysql
+S: char * resultado
+*/
 char * get_dato(char * str){
      conn = mysql_init(NULL);
       if (!mysql_real_connect(conn, server,
@@ -167,7 +178,11 @@ char * get_dato(char * str){
     mysql_close(conn);
   return dato;
   }  
-
+/*
+Funcion que consulta en la base y imprime todas las filas y columnas de asientos, formando una matriz
+E: codigo de vuelo
+S: Void
+*/
 void imprime_asientos(char * codigo_vuelo){
   char consulta[150];
   char *fis;
@@ -216,7 +231,11 @@ void imprime_asientos(char * codigo_vuelo){
   }
   printf("\n");
 }
-      
+/*
+Funcion que consulta en la base de datos todos los datos relacionados con una reserva, utilizando un filtro de un numero
+E: int seleccion, el cual determina cual consulta va a realizar
+   char * codigo, donde se envia el codigo de la reserva 
+*/
 char * consultar_doc(int seleccion, char * codigo){
   char consulta[500];
   char parte1[50];
@@ -225,57 +244,48 @@ char * consultar_doc(int seleccion, char * codigo){
   if(seleccion == 0){
     snprintf(consulta, sizeof(consulta), "select idReserva from Reserva where codigo = '%s'", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 1){
     snprintf(consulta, sizeof(consulta), "select fecha from Reserva where codigo = '%s' limit 1", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 2){
     snprintf(consulta, sizeof(consulta), "select aero.nombre, aero.hub from ((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') limit 1", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
 
   }
   else if(seleccion == 3){
     snprintf(consulta, sizeof(consulta), "select Vuelo.codigo from ((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') limit 1", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 4){
     snprintf(consulta, sizeof(consulta), "select Vuelo.origen, Vuelo.salida from ((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') limit 1", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 5){
     snprintf(consulta, sizeof(consulta), "select Vuelo.destino, Vuelo.llegada from ((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s') limit 1", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 6){
     snprintf(consulta, sizeof(consulta), "select Pasajero.nombre, Pasajero.apellido1, Pasajero.apellido2 from Pasajero inner join Reserva on idPasajero = Pasajero_idPasajero and codigo = '%s'", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   
   else if(seleccion == 7){
     snprintf(consulta, sizeof(consulta), "select count(Reserva.Pasajero_idPasajero) from Reserva where codigo = '%s'", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
   else if(seleccion == 8){
     snprintf(consulta, sizeof(consulta), "select sum(Asiento.costo) from ((((Aerolinea as aero inner join Avion on  aero.idAereolinea = Avion.Aereolinea_idAereolinea) inner join Vuelo on Avion.idAvion = Vuelo.Avion_idAvion) inner join Asiento on idVuelo = Vuelo_idVuelo) inner join Reserva on Reserva_idReserva = idReserva and Reserva.codigo = '%s')", codigo);
     resultado = consultar(consulta);
-    //printf("%s\n", resultado);
     return resultado;
   }
 }

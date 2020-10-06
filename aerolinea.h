@@ -7,7 +7,9 @@
 #include <setjmp.h>
 #include "hpdf.h"
 jmp_buf env;
-
+/*
+Archivo header donde se inicializan todas las funciones
+*/
 typedef struct Avion{
 	char *matricula;	
 	char * modelo ;
@@ -47,7 +49,7 @@ char * obtenerId(char pasaporte[]);
 void consultar_r();
 char * consultar(char * str);
 char * obtenerId_R();
-char *genera_codigo(int length);
+char *genera_codigo(int tam);
 void estadisticas();
 void estado_vuelo();
 int insertar_personas();
@@ -56,6 +58,7 @@ int borrar_avion();
 void agregar_avion();
 int editar_Avion();
 void consultar_avion();
+//Comando de Compilacion segun se requiera
 //Si se quiere con cuadriculado
 //gcc $(mysql_config --cflags) conexion.c aerolinea.c operativos.c generales.c crear_pdf.c grid_sheet.c $(mysql_config --libs) -lhpdf -lpng -lz -lm -o prueba
 //Si no

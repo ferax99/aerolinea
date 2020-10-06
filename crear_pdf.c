@@ -10,15 +10,9 @@ void error_handler (HPDF_STATUS   error_no,
 }
 
 /*
-identificador(auto generado) = int 
-fecha y hora de la reservación = string
-información de aerolínea = string 
-código de vuelo = double
-lugar y fecha salida = string
-lugary fecha arribo = string
-número de asientos de la reservación = string 
-personas de la reservación = string 
-monto de reservación = float
+Funcion que imprime la descripcion de un texto, tambien se podria ver como un subtitulo
+E: HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *text
+S: Void
 */
 
 void show_description (HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *text){
@@ -34,7 +28,11 @@ void show_description (HPDF_Page page, HPDF_REAL x, HPDF_REAL y, const char *tex
     HPDF_Page_SetFontAndSize (page, font, fsize);
     HPDF_Page_SetRGBFill (page, c.r, c.g, c.b);
 }
-
+/*
+Funcion que crear el pdf, utilzando los diferentes datos obtenidos de las consultas
+E: char * codigo, donde se recibe el codigo de la reserva
+S: 0;
+*/
 int crear_doc (char * codigo){
     const char *page_title = "Comprobante";
     char tags[10][40] = {"Identificador", "Fecha Y Hora de Reservacion", "Informacion de la Aerolinea", 
@@ -63,10 +61,12 @@ int crear_doc (char * codigo){
         HPDF_Free (pdf);
         return 1;
     }
+    //Se define el tipo de letra
     HPDF_SetCompressionMode (pdf, HPDF_COMP_ALL);
     font = HPDF_GetFont (pdf, "Helvetica", NULL);
     page = HPDF_AddPage (pdf);
     HPDF_Page_SetFontAndSize (page, font, 18);
+    //Se define el titulo del archivo
     tw = HPDF_Page_TextWidth (page, page_title);
     HPDF_Page_BeginText (page);
     HPDF_Page_TextOut (page, (HPDF_Page_GetWidth(page) - tw) / 2, HPDF_Page_GetHeight (page) - 50, page_title);
@@ -77,6 +77,7 @@ int crear_doc (char * codigo){
 
     HPDF_Page_SetFontAndSize(page, font, fsize);
     HPDF_Page_SetLineWidth (page, 2);
+    //Ciclo que obtiene todos los datos
     while(tags[cont][0] != 0){
         ypos -= 30;
         guarda = consultar_doc(cont, codigo);

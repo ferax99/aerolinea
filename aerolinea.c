@@ -1,5 +1,11 @@
 #include "aerolinea.h"
-
+/*
+Menu principal con inicio de sesion, se compara la clave "1234" con el input del usuario
+Se llaman los otros submenus, segun el input del usuario
+Datos de prueba para la reserva: 2385502,1882314,2344905
+E: Void
+S: Void
+*/
 int main(){
 	char clave[256];
 	char pred[5] = "1234";
@@ -51,5 +57,3 @@ int main(){
 	printf("Se saldra del programa\n");
 	return 0;
 }
-
-//2385502,1882314,2344905
