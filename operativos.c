@@ -259,12 +259,6 @@ int insertar_personas(){
 	
 	}
 void estado_vuelo(){
-	/*
-	E:
-	S:
-	R:
-	funcionamiento: consulta datos especificos sobre la base 
-	*/
 	char *codigo;
 	char query[256];
 	char query2[256];
@@ -276,11 +270,10 @@ void estado_vuelo(){
 	snprintf(query2, sizeof(query2),"select * from estado2 where codigo = '%s'",codigo );
 	system("clear");
 	printf("codigo | origen     | salida              | destino      | llegada             | SO   | BO   | EO  \n");
-	consultar_p(query);
+	consultar(query);
 	printf("\n###################\n Personas en el vuelo\n###################\n");
 	printf("codigo de vuelo|tipo|nombre|pasaporte|codigo de reserva|numero de Asiento|costo \n");
-	consultar_p(query2);
-	imprime_asientos(codigo);
+	consultar(query2);
 	getchar();
 	getchar();
 	}
@@ -290,12 +283,13 @@ void estadisticas(){
 	printf("codigo|total \n");
 	consultar("select v.codigo, sum(a.costo) as total from Asiento a inner join Vuelo v on a.Vuelo_idVuelo = v.idVuelo where a.tipo like '%O%' group by v.codigo desc order by total desc limit 3;");
 	printf("\n\nTop 3 de vuelos con mayor cantidad de personas (de mayor a menor)\n");
-	printf("codigo|personas \n\n");
+	printf("codigo|personas \n");
 	consultar("select v.codigo, count(v.codigo)  as personas from Vuelo v inner join Asiento a on v.idVuelo = a.Vuelo_idVuelo where a.tipo like '%O%' group by v.codigo  order by personas desc limit 3;");
 	getchar();
 	getchar();
 	
 	}
+
 
 
 void submenu_op(){
